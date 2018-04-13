@@ -87,6 +87,7 @@ func (ep *Epoller) Dispatch() error {
 
 		nevents, err = syscall.EpollWait(epfd, events[:], -1)
 		if err != nil {
+			// TODO: handle EAGAIN
 			return err
 		}
 
