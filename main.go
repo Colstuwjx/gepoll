@@ -4,16 +4,17 @@ import (
 	"flag"
 	"log"
 
-	"gepoll/epoller"
+	"github.com/Colstuwjx/gepoll/epoller"
 )
-
-var deviceFlag = flag.String("device", "/dev/kmsg", "device to use")
 
 func lineHandler(buf []byte, n int) {
 	log.Println("data ", string(buf))
 }
 
 func main() {
+	deviceFlag := flag.String("device", "/dev/kmsg", "device to use")
+	flag.Parse()
+
 	ep := epoller.NewEpoller(lineHandler)
 	err := ep.Open(*deviceFlag)
 	if err != nil {

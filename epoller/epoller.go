@@ -5,6 +5,7 @@ package epoller
 */
 
 import (
+	"fmt"
 	"os"
 	"syscall"
 )
@@ -30,14 +31,22 @@ func NewEpoller(handler EventHandler) *Epoller {
 	}
 }
 
+func (ep *Epoller) setFd(fd int) error {
+	if fd > 0 {
+		ep.fd = fd
+		return nil
+	}
+
+	return fmt.Errorf("bad fd %d", fd)
+}
+
 func (ep *Epoller) Open(device string) error {
 	fd, err := syscall.Open(device, os.O_RDONLY, 0666)
 	if err != nil {
 		return err
 	}
 
-	ep.fd = fd
-	return nil
+	return ep.setFd(fd)
 }
 
 func (ep *Epoller) Close() error {
